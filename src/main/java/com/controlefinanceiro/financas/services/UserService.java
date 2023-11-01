@@ -1,6 +1,8 @@
 package com.controlefinanceiro.financas.services;
 
 import com.controlefinanceiro.financas.entities.User;
+import com.controlefinanceiro.financas.entities.exceptions.ConflictException;
+import com.controlefinanceiro.financas.entities.exceptions.ResourceNotFoundException;
 import com.controlefinanceiro.financas.repositories.UserRepository;
 import com.controlefinanceiro.financas.security.JWTService;
 import com.controlefinanceiro.financas.shared.UserDTO;
@@ -15,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,13 +47,13 @@ public class UserService {
 
     public UserDTO findById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário com o ID: " + id + " não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário com o ID: " + id + " não encontrado."));
         return new ModelMapper().map(user, UserDTO.class);
     }
 
     public UserDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Email não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Email não encontrado"));
         return new ModelMapper().map(user, UserDTO.class);
     }
 
@@ -63,7 +64,7 @@ public class UserService {
 
         Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
         if (existingUser.isPresent()) {
-            throw new InputMismatchException("Já existe usuário cadastrado com o email: " + user.getEmail());
+            throw new ConflictException("Já existe usuário cadastrado com o email: " + user.getEmail());
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
