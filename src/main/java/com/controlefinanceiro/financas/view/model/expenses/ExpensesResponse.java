@@ -12,5 +12,4 @@ public class ExpensesResponse {
     private String category;
     private Date date;
     private Double value;
-    private Long userId;
 }
