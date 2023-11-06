@@ -29,10 +29,8 @@ public class Income {
     @Size(min = 1, max = 255)
     private String category;
     @NotNull
-    @NotBlank
     private Date date;
     @NotNull
     private Double value;
-    @NotNull
     private Long userId;
 }

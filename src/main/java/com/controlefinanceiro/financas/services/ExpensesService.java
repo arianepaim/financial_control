@@ -17,13 +17,14 @@ public class ExpensesService {
     @Autowired
     private ExpensesRepository expensesRepository;
 
-    public List<ExpensesDTO> findAll() {
-        List<Expenses> list = expensesRepository.findAll();
+    public List<ExpensesDTO> findAllByUserId(Long userId) {
+        List<Expenses> list = expensesRepository.findAllByUserId(userId);
         return list
                 .stream()
                 .map(expenses -> new ModelMapper().map(expenses, ExpensesDTO.class))
                 .collect(Collectors.toList());
     }
+
 
     public ExpensesDTO findById(Long id) {
         Expenses expenses = expensesRepository.findById(id)
@@ -41,11 +42,12 @@ public class ExpensesService {
         return dto;
     }
 
-    public ExpensesDTO update(ExpensesDTO dto, Long id) {
+    public ExpensesDTO update(ExpensesDTO dto, Long id, Long userId) {
         if (!expensesRepository.existsById(id)) {
             throw new ResourceNotFoundException("Despesas com o ID: " + id + " não encontrada");
         }
         dto.setId(id);
+        dto.setUserId(userId);
 
         Expenses expenses = new ModelMapper().map(dto, Expenses.class);
         expenses = expensesRepository.save(expenses);
