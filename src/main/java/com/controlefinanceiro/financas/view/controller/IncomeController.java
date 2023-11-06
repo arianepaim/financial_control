@@ -73,12 +73,12 @@ public class IncomeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<IncomeResponse> update(@RequestBody IncomeRequest request, @PathVariable Long id) {
-        IncomeDTO existingExpense = service.findById(id);
+        IncomeDTO existingIncome = service.findById(id);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = ((UserDTO) authentication.getPrincipal()).getId();
 
-        if (!existingExpense.getUserId().equals(userId)) {
+        if (!existingIncome.getUserId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
@@ -91,12 +91,12 @@ public class IncomeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        IncomeDTO existingExpense = service.findById(id);
+        IncomeDTO existingIncome = service.findById(id);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = ((UserDTO) authentication.getPrincipal()).getId();
 
-        if (!existingExpense.getUserId().equals(userId)) {
+        if (!existingIncome.getUserId().equals(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Você não tem permissão para excluir essa despesa.");
         }
 

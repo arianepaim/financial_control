@@ -30,7 +30,7 @@ public class IncomeService {
 
     public IncomeDTO findById(Long id) {
         Income income = incomeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Recita com o ID: " + id + " não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Receita com o ID: " + id + " não encontrada"));
         return new ModelMapper().map(income, IncomeDTO.class);
     }
 
